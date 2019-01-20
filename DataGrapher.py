@@ -4,25 +4,26 @@ import os
 
 localfile = raw_input("Localfile: ")
 
-remotehost = raw_input("Remote Host: ")
+remotehost = ''
+remotefile = ''
+username = ''
 
-remotefile = raw_input("Remotefile: ")
+if localfile != 'auto':
+    remotehost = raw_input("Remote Host: ")
+    remotefile = raw_input("Remotefile: ")
+    username = raw_input("Remote User: ")
+else:
+    remotehost = '10.9.97.2'
+    b = raw_input("Remote File Name: ")
+    remotefile = '~/spartanlogs/' + b
+    localfile = b
+    username = 'lvuser'
 
-os.system('scp "%s:%s" "%s"' % (remotehost, remotefile, localfile) )
+os.system('scp "%s@%s:%s" "%s"' % (username, remotehost, remotefile, localfile) )
 
-data = open('1_log.csv', 'r')
+data = open(localfile, 'r')
 
 lines = data.read()
-
-"""while True:
-    a = data.readline()
-    print('"' + a + '"')
-    if not a:
-        print('Break')
-        break
-    else:
-        lines.append(int(a))
-        print(int(a))"""
 
 data.close()
 
@@ -41,26 +42,16 @@ for x in range(7):
 
 print(bits)
 
-"""for x in range(len(bits)):
-    print(x)"""
-
 for x in range(len(bits) / 7):
-#        bits = lines[x].split(',')
-#    print(((x + 1) * 7) - 7)
     time.append(int(bits[((x + 1) * 7) - 7]))
-#    print('"' + bits[((x + 1) * 7) - 6] + '"')
     voltage.append(int(bits[((x + 1) * 7) - 6]))
     current.append(int(bits[((x + 1) * 7) - 5]))
     ticks.append(int(bits[((x + 1) * 7) - 4]))
     target.append(int(bits[((x + 1) * 7) - 3]))
     error.append(int(bits[((x + 1) * 7) - 2]))
-#    print('"' + bits[((x + 1) * 7) - 2] + '"')
     pid_output.append(int(bits[((x + 1) * 7) - 1]))
 
 print('BAH')
-
-#time.remove(time[0])
-#error.remove(error[0])
 
 plt.plot(time, error)
 plt.xlabel('Time')
